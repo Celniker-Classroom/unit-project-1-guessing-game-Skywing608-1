@@ -19,9 +19,10 @@ document.getElementById("playBtn").addEventListener("click", function(){
         }
     }
     
-    //round setup
+    //pick answer
     answer = Math.floor(Math.random() * range) + 1;
 
+    //Disable & enable buttons/radios
     document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
     document.getElementById("guess").value="";
     document.getElementById("guessBtn".disabled) = false;
