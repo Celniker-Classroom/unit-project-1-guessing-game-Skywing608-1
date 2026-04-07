@@ -1,29 +1,40 @@
+//Game state
+let answer = 0;
+let guessCount = 0;
+let totalWins = 0;
+let totalGuesses = 0;
+let scores = 0;
 //Finding name
-var name = prompt("Hello! What is your name?");
-
-//difficulty selection
-var easy = document.querySelector('input[id="e"]:checked').value;
-var medium = document.querySelector('input[id="m"]:checked').value;
-var hard = document.querySelector('input[id="h"]:checked').value;
+let playerName = prompt("Hello! What is your name?");
 
 //Play button
-function play(){
+document.getElementById("playBtn").addEventListener("click", function(){
     document.getElementById("guessBtn").disabled = false;
-    if (easy = true){
-        var randomNum = Math.floor(Math.random() * easy) + 1;
-        alert(randomNum);
+    //document.getElementById("playBtn").disabled = true;
+    let radio = document.getElementsByName("level");
+    let range = 3;
+    for (let i = 0; i < radio.length; i++){
+        if (radio[i].checked){
+            range = parseInt(radio[i].value);
+        }
     }
     
-    if (medium = true){
-        var randomNum = Math.floor(Math.random() * medium) + 1;
-        alert(randomNum);
-    }
-    
-    if (hard = true){
-        var randomNum = Math.floor(Math.random() * hard) + 1;
-        alert(randomNum);
+    //round setup
+    answer = Math.floor(Math.random() * range) + 1;
+
+    document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
+    document.getElementById("guess").value="";
+    document.getElementById("guessBtn".disabled) = false;
+    document.getElementById("playBtn".disabled) = true;
+    document.getElementById("giveUpBtn").disabled = false;
+
+    for (let i = 0; i <radioadio.length; i++){
+        radio[i].disabled = true;
     }
 
-}
+});
 
-document.getElementById("playBtn").addEventListener("click", play);
+//Guess button
+
+
+
