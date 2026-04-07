@@ -10,7 +10,7 @@ let playerName = prompt("Hello! What is your name?");
 //Play button
 document.getElementById("playBtn").addEventListener("click", function(){
     document.getElementById("guessBtn").disabled = false;
-    //document.getElementById("playBtn").disabled = true;
+    document.getElementById("playBtn").disabled = true;
     let radio = document.getElementsByName("level");
     let range = 3;
     for (let i = 0; i < radio.length; i++){
@@ -18,7 +18,7 @@ document.getElementById("playBtn").addEventListener("click", function(){
             range = parseInt(radio[i].value);
         }
     }
-    
+
     //pick answer
     answer = Math.floor(Math.random() * range) + 1;
 
@@ -36,6 +36,10 @@ document.getElementById("playBtn").addEventListener("click", function(){
 });
 
 //Guess button
+document.getElementById("guessBtn").addEventListener("click", function(){
+    let Guess = document.getElementById("guess").textContent;
 
+
+})
 
 
