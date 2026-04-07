@@ -28,7 +28,7 @@ document.getElementById("playBtn").addEventListener("click", function(){
     document.getElementById("playBtn".disabled) = true;
     document.getElementById("giveUpBtn").disabled = false;
 
-    for (let i = 0; i <radioadio.length; i++){
+    for (let i = 0; i <radio.length; i++){
         radio[i].disabled = true;
     }
 
