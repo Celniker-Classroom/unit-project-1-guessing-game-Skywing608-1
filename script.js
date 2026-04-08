@@ -37,9 +37,34 @@ document.getElementById("playBtn").addEventListener("click", function(){
 
 //Guess button
 document.getElementById("guessBtn").addEventListener("click", function(){
-    let Guess = document.getElementById("guess").textContent;
+    let guess = document.getElementById("guess").value;
+    if (guess == answer){
+        document.getElementById("msg").textContent = "Good job! " + playerName + "You guessed Correctly!";
+        totalWins++;
+        totalGuesses += guessCount;
+        scores += Math.max(0, 10 - guessCount);
+        document.getElementById("score").textContent = "Score: " + scores;
+        document.getElementById("guessBtn").disabled = true;
+        document.getElementById("playBtn").disabled = false;
+        document.getElementById("giveUpBtn").disabled = true;
 
+        let radio = document.getElementsByName("level");
+        for (let i = 0; i < radio.length; i++){
+            radio[i].disabled = false;
+        }
+    }
+    else if (guess > answer){
+        document.getElementById("msg").textContent = "Close " + playerName + "! The answer is lower. Try again!";
+        guessCount++;
+    }
+    else if (guess < answer){
+        document.getElementById("msg").textContent = "Close " + playerName + "! The answer is higher. Try again!";   
+        guessCount++;
+    }
+    else {
+        document.getElementById("msg").textContent = "Invalid input, please enter a valid number.";
 
+    }
 })
 
-
+//Give up button
