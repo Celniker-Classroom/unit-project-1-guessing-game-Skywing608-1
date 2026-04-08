@@ -53,14 +53,16 @@ document.getElementById("guessBtn").addEventListener("click", function(){
     else if (guess > answer){
         document.getElementById("msg").textContent = "Close " + playerName + "! The answer is lower. Try again!";
         guessCount++;
+        document.getElementById("giveUpBtn").disabled = false;
     }
     else if (guess < answer){
         document.getElementById("msg").textContent = "Close " + playerName + "! The answer is higher. Try again!";   
         guessCount++;
+        document.getElementById("giveUpBtn").disabled = false;
     }
     else {
         document.getElementById("msg").textContent = "Invalid input, please enter a valid number.";
-
+        document.getElementById("giveUpBtn").disabled = false;
     }
 });
 
@@ -87,3 +89,5 @@ function updateScore(score){
     document.getElementById("wins").textContent = "Total Wins: " + totalWins;
     document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalWins || 0).toFixed(2);
 }
+
+//timer
