@@ -39,11 +39,8 @@ document.getElementById("playBtn").addEventListener("click", function(){
 document.getElementById("guessBtn").addEventListener("click", function(){
     let guess = document.getElementById("guess").value;
     if (guess == answer){
-        document.getElementById("msg").textContent = "Good job! " + playerName + "You guessed Correctly!";
-        totalWins++;
-        totalGuesses += guessCount;
-        scores += Math.max(0, 10 - guessCount);
-        document.getElementById("score").textContent = "Score: " + scores;
+        document.getElementById("msg").textContent = "Congratulations " + playerName + "! You guessed the correct number in " + guessCount + " guesses!";
+        updateScore(guessCount);
         document.getElementById("guessBtn").disabled = true;
         document.getElementById("playBtn").disabled = false;
         document.getElementById("giveUpBtn").disabled = true;
@@ -65,6 +62,28 @@ document.getElementById("guessBtn").addEventListener("click", function(){
         document.getElementById("msg").textContent = "Invalid input, please enter a valid number.";
 
     }
-})
+});
 
 //Give up button
+document.getElementById("giveUpBtn").addEventListener("click", function(){
+    document.getElementById("msg").textContent = "The correct answer was " + answer + ". Better luck next time, " + playerName + "!";
+    totalGuesses += guessCount;
+    document.getElementById("guessBtn").disabled = true;
+    document.getElementById("playBtn").disabled = false;
+    document.getElementById("giveUpBtn").disabled = true;
+
+    let radio = document.getElementsByName("level");
+    for (let i = 0; i < radio.length; i++){
+        radio[i].disabled = false;
+    }
+})
+
+//stats
+
+function updateScore(score){
+    totalWins++;
+    totalGuesses += score;
+
+    document.getElementById("wins").textContent = "Total Wins: " + totalWins;
+    document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalWins || 0).toFixed(2);
+}
