@@ -4,8 +4,19 @@ let guessCount = 0;
 let totalWins = 0;
 let totalGuesses = 0;
 let scores = 0;
+let now = new Date();
+let start = now;
+let intervalId;
 //Finding name
 let playerName = prompt("Hello! What is your name?");
+
+//timer
+function updateTimer() {
+    let now = new Date().getTime();
+    let elapsed = (now - start) / 1000;  // convert ms to seconds
+    document.getElementById("avgTime").textContent = elapsed.toFixed(2);
+}
+
 
 //Play button
 document.getElementById("playBtn").addEventListener("click", function(){
@@ -17,6 +28,7 @@ document.getElementById("playBtn").addEventListener("click", function(){
         if (radio[i].checked){
             range = parseInt(radio[i].value);
         }
+    intervalId = setInterval(updateTimer, 10);
     }
 
     //pick answer
@@ -39,7 +51,7 @@ document.getElementById("playBtn").addEventListener("click", function(){
 document.getElementById("guessBtn").addEventListener("click", function(){
     let guess = document.getElementById("guess").value;
     if (guess == answer){
-        document.getElementById("msg").textContent = "Congratulations " + playerName + "! You guessed the correct number in " + guessCount + " guesses!";
+        document.getElementById("msg").textContent = "Congratulations " + playerName + "! You guessed the correct number in " + (guessCount + 1) + " guesses!";
         updateScore(guessCount);
         document.getElementById("guessBtn").disabled = true;
         document.getElementById("playBtn").disabled = false;
@@ -49,6 +61,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
         for (let i = 0; i < radio.length; i++){
             radio[i].disabled = false;
         }
+        clearInterval(intervalId);
     }
     else if (guess > answer){
         document.getElementById("msg").textContent = "Close " + playerName + "! The answer is lower. Try again!";
@@ -70,6 +83,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
 document.getElementById("giveUpBtn").addEventListener("click", function(){
     document.getElementById("msg").textContent = "The correct answer was " + answer + ". Better luck next time, " + playerName + "!";
     totalGuesses += guessCount;
+    clearInterval(intervalId);
     document.getElementById("guessBtn").disabled = true;
     document.getElementById("playBtn").disabled = false;
     document.getElementById("giveUpBtn").disabled = true;
@@ -90,4 +104,20 @@ function updateScore(score){
     document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalWins || 0).toFixed(2);
 }
 
-//timer
+//leaderboard
+scores.push(scores);
+scores.sort(function(a, b){return a - b});
+
+let leaderboard = document.getElementsByName("leaderboard");
+for (let i = 0; i < leaderboard.length; i++){
+    if (i < scores.length){
+        leaderboard[i].textContent = scores[i];
+    }
+    else{
+        leaderboard[i].textContent = "_";
+    }
+    document.getElementById("leader1").textContent = "1. " + (scores[0] || "100");
+    document.getElementById("leader2").textContent = "2. " + (scores[1] || "100");
+    document.getElementById("leader3").textContent = "3. " + (scores[2] || "100");   
+}
+   
