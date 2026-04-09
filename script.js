@@ -13,6 +13,7 @@ let difference;
 let timer = 0;
 //Finding name
 let playerName = prompt("Hello! What is your name?");
+playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
 function getDaySuffix(day) {
  if (day >= 11 && day <= 13) {
@@ -39,7 +40,10 @@ function displayCurrentDate() {
  const day = now.getDate();
  const suffix = getDaySuffix(day);
  const year = now.getFullYear();
- document.getElementById("date").textContent = `${monthNames[now.getMonth()]} ${day}${suffix}, ${year}`;
+ const hours = now.getHours().toString().padStart(2, '0');
+ const minutes = now.getMinutes().toString().padStart(2, '0');
+ const seconds = now.getSeconds().toString().padStart(2, '0');
+ document.getElementById("date").textContent = `${monthNames[now.getMonth()]} ${day}${suffix}, ${year} ${hours}:${minutes}:${seconds}`;
 }
 
 // Initialize displays
@@ -87,6 +91,7 @@ document.getElementById("playBtn").addEventListener("click", function(){
  for (let i = 0; i <radio.length; i++){
      radio[i].disabled = true;
  }
+
 });
 
 //Guess button
@@ -137,7 +142,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
      }
  }
  else {
-     document.getElementById("msg").textContent = "Invalid input, please enter a valid number.";
+     document.getElementById("msg").textContent = playerName + ", please enter a valid number between 1 and 100.";
      document.getElementById("giveUpBtn").disabled = false;
  }
 });
