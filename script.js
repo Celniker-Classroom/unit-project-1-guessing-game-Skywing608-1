@@ -216,5 +216,3 @@ function updateLeaderboard() {
    document.getElementById("leader3").textContent = scores[2] ? scores[2].guesses : "_";
 }
  
-
-
