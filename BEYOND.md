@@ -1,0 +1,2 @@
+The first aditional feature was an input validation in lines 97-99. I think that his helps by making the user put a valid input to complete the game instead of putting spmething invalid
+I also added some css styling to make the website in dark mode which in my opinion is more appealing to look at in html lines 5-87 as well as javascript lines 226 and 227

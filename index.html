@@ -2,21 +2,119 @@
 <html>
 <head>
  <title>JavaScript Number Guessing Game</title>
+ <style>
+   :root {
+     --bg-color: #ffffff;
+     --text-color: #000000;
+     --button-bg: #f0f0f0;
+     --button-border: #ccc;
+     --input-bg: #fff;
+     --input-border: #ccc;
+   }
+
+   .dark-mode {
+     --bg-color: #121212;
+     --text-color: #ffffff;
+     --button-bg: #333;
+     --button-border: #555;
+     --input-bg: #222;
+     --input-border: #555;
+   }
+
+   body {
+     background-color: var(--bg-color);
+     color: var(--text-color);
+     font-family: Arial, sans-serif;
+     padding: 20px;
+     transition: background-color 0.3s, color 0.3s;
+   }
+
+   button {
+     background-color: var(--button-bg);
+     border: 1px solid var(--button-border);
+     color: var(--text-color);
+     padding: 10px;
+     margin: 5px;
+     cursor: pointer;
+     transition: background-color 0.3s, border-color 0.3s;
+   }
+
+   input[type="text"] {
+     background-color: var(--input-bg);
+     border: 1px solid var(--input-border);
+     color: var(--text-color);
+     padding: 5px;
+     transition: background-color 0.3s, border-color 0.3s;
+   }
+
+   .theme-toggle {
+     position: relative;
+     display: inline-block;
+     width: 60px;
+     height: 34px;
+     margin: 10px;
+   }
+
+   .theme-toggle input {
+     opacity: 0;
+     width: 0;
+     height: 0;
+   }
+
+   .slider {
+     position: absolute;
+     cursor: pointer;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: #ccc;
+     transition: .4s;
+     border-radius: 34px;
+   }
+
+   .slider:before {
+     position: absolute;
+     content: "";
+     height: 26px;
+     width: 26px;
+     left: 4px;
+     bottom: 4px;
+     background-color: white;
+     transition: .4s;
+     border-radius: 50%;
+   }
+
+   input:checked + .slider {
+     background-color: #2196F3;
+   }
+
+   input:checked + .slider:before {
+     transform: translateX(26px);
+   }
+ </style>
  <script src="script.js" defer></script>
 </head>
 <body>
  <p id="date"></p>
 
+ <div class="theme-toggle">
+   <input type="checkbox" id="theme-switch">
+   <label for="theme-switch" class="slider"></label>
+ </div>
+
  <h3>Level</h3>
  <input type="radio" name="level" id="e" value="3" checked><label for="e">Easy</label>
  <input type="radio" name="level" id="m" value="10"><label for="m">Medium</label>
  <input type="radio" name="level" id="h" value="100"><label for="h">Hard</label>
+
  <button id="playBtn">Play</button>
 
  <h3 id="msg">Select a Level</h3>
  <input type="text" id="guess">
  <button id="guessBtn" disabled>Guess</button>
  <button id="giveUpBtn" disabled>Give Up</button>
+
  <h3>Stats</h3>
  <p id="wins">Total wins: 0</p>
  <p id="avgScore">Average Score: </p>

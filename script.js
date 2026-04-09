@@ -1,4 +1,4 @@
-//Game state
+// Game state variables
 let answer = 0;
 let guessCount = 0;
 let totalWins = 0;
@@ -7,207 +7,227 @@ let totalGuesses = 0;
 let totalTime = 0;
 let scores = [];
 let fastestTime = Infinity;
-let start = 0;
-let intervalId;
-let difference;
-let timer = 0;
-//Finding name
+let startTime = 0;
+let timeIntervalId;
+
+
+// Get player name and case it correctly
 let playerName = prompt("Hello! What is your name?");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
-function getDaySuffix(day) {
- if (day >= 11 && day <= 13) {
-     return "th";
- }
- switch (day % 10) {
-     case 1:
-         return "st";
-     case 2:
-         return "nd";
-     case 3:
-         return "rd";
-     default:
-         return "th";
- }
+
+// Function to format time with month name, day suffix, and seconds
+function time() {
+   const now = new Date();
+   const monthNames = [
+       "January", "February", "March", "April", "May", "June",
+       "July", "August", "September", "October", "November", "December"
+   ];
+   const day = now.getDate();
+   let suffix = "th";
+   if (day >= 11 && day <= 13) {
+       suffix = "th";
+   } else {
+       switch (day % 10) {
+           case 1: suffix = "st"; break;
+           case 2: suffix = "nd"; break;
+           case 3: suffix = "rd"; break;
+       }
+   }
+   const year = now.getFullYear();
+   const hours = now.getHours().toString().padStart(2, '0');
+   const minutes = now.getMinutes().toString().padStart(2, '0');
+   const seconds = now.getSeconds().toString().padStart(2, '0');
+   return `${monthNames[now.getMonth()]} ${day}${suffix}, ${year} ${hours}:${minutes}:${seconds}`;
 }
 
-function displayCurrentDate() {
- const now = new Date();
- const monthNames = [
-     "January", "February", "March", "April", "May", "June",
-     "July", "August", "September", "October", "November", "December"
- ];
- const day = now.getDate();
- const suffix = getDaySuffix(day);
- const year = now.getFullYear();
- const hours = now.getHours().toString().padStart(2, '0');
- const minutes = now.getMinutes().toString().padStart(2, '0');
- const seconds = now.getSeconds().toString().padStart(2, '0');
- document.getElementById("date").textContent = `${monthNames[now.getMonth()]} ${day}${suffix}, ${year} ${hours}:${minutes}:${seconds}`;
+
+// Function to start a new game
+function play() {
+   // Get selected level
+   let range = 3;
+   const radios = document.getElementsByName("level");
+   for (let i = 0; i < radios.length; i++) {
+       if (radios[i].checked) {
+           range = parseInt(radios[i].value);
+           break;
+       }
+   }
+
+
+   // Generate random answer
+   answer = Math.floor(Math.random() * range) + 1;
+
+
+   // Reset guess count
+   guessCount = 0;
+
+
+   // Record start time
+   startTime = new Date().getTime();
+
+
+   // Update message
+   document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
+
+
+   // Clear guess input
+   document.getElementById("guess").value = "";
+
+
+   // Enable/disable buttons
+   document.getElementById("guessBtn").disabled = false;
+   document.getElementById("giveUpBtn").disabled = false;
+   document.getElementById("playBtn").disabled = true;
+
+
+   // Disable level radios
+   for (let i = 0; i < radios.length; i++) {
+       radios[i].disabled = true;
+   }
 }
+
+
+// Function to handle a guess
+function makeGuess() {
+   const guessInput = document.getElementById("guess");
+   const guess = parseInt(guessInput.value);
+
+
+   if (isNaN(guess)) {
+       document.getElementById("msg").textContent = "Please enter a valid number.";
+       return;
+   }
+
+   guessCount++;
+
+
+   if (guess === answer) {
+       // Correct guess
+       const endTime = new Date().getTime();
+       const elapsedTime = (endTime - startTime) / 1000;
+       document.getElementById("msg").textContent = "Congratulations " + playerName + "! You guessed the correct number in " + guessCount + " guesses!";
+       updateScore(guessCount);
+       updateTimers(elapsedTime);
+       reset();
+   } else {
+       // Wrong guess - provide feedback
+       let feedback = "";
+       if (guess > answer) {
+           feedback = "The answer is lower";
+       } else {
+           feedback = "The answer is higher";
+       }
+
+
+       // Add hot/warm/cold
+       const difference = Math.abs(guess - answer);
+       if (difference <= 2) {
+           feedback += ", but you are very hot!";
+       } else if (difference <= 5) {
+           feedback += ", but you are warm!";
+       } else {
+           feedback += ", but you are cold!";
+       }
+
+
+       document.getElementById("msg").textContent = playerName + ", " + feedback;
+   }
+}
+
+// Function to update score after win or give up
+function updateScore(score) {
+   totalWins++;
+   totalGames++;
+   totalGuesses += score;
+   scores.push(score);
+   scores.sort((a, b) => a - b); // Sort ascending (lower = better)
+
+   // Update displays
+   document.getElementById("wins").textContent = "Total wins: " + totalWins;
+   document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalGames).toFixed(2);
+
+   // Update leaderboard
+   updateLeaderboard();
+}
+
+// Function to update timer stats
+function updateTimers(elapsedTime) {
+   totalTime += elapsedTime;
+
+
+   if (elapsedTime < fastestTime) {
+       fastestTime = elapsedTime;
+       document.getElementById("fastest").textContent = "Fastest Game: " + fastestTime.toFixed(2) + " seconds";
+   }
+
+   document.getElementById("avgTime").textContent = "Average Time: " + (totalTime / totalGames).toFixed(2) + " seconds";
+}
+
+// Function to reset for next round
+function reset() {
+   // Enable level radios
+   const radios = document.getElementsByName("level");
+   for (let i = 0; i < radios.length; i++) {
+       radios[i].disabled = false;
+   }
+
+   // Enable/disable buttons
+   document.getElementById("playBtn").disabled = false;
+   document.getElementById("guessBtn").disabled = true;
+   document.getElementById("giveUpBtn").disabled = true;
+}
+
+// Function to handle give up
+function giveUp() {
+   // Get current range
+   let range = 3;
+   const radios = document.getElementsByName("level");
+   for (let i = 0; i < radios.length; i++) {
+       if (radios[i].checked) {
+           range = parseInt(radios[i].value);
+           break;
+       }
+   }
+
+   const endTime = new Date().getTime();
+   const elapsedTime = (endTime - startTime) / 1000;
+
+   document.getElementById("msg").textContent = "The correct answer was " + answer + ". Better luck next time, " + playerName + "! Your score is " + range + ".";
+   updateScore(range);
+   updateTimers(elapsedTime);
+   reset();
+}
+
+// Function to update leaderboard display
+function updateLeaderboard() {
+   const leaderboardItems = document.getElementsByName("leaderboard");
+   for (let i = 0; i < leaderboardItems.length; i++) {
+       if (i < scores.length) {
+           leaderboardItems[i].textContent = scores[i];
+       } else {
+           leaderboardItems[i].textContent = "--";
+       }
+   }
+}
+
+// Initialize the game
+document.getElementById("date").textContent = time();
+timeIntervalId = setInterval(() => {
+   document.getElementById("date").textContent = time();
+}, 1000);
+
+// Wire event listeners
+document.getElementById("playBtn").addEventListener("click", play);
+document.getElementById("guessBtn").addEventListener("click", makeGuess);
+document.getElementById("giveUpBtn").addEventListener("click", giveUp);
+
+// Theme toggle
+document.getElementById("theme-switch").addEventListener("change", function() {
+   document.body.classList.toggle("dark-mode");
+});
 
 // Initialize displays
-displayCurrentDate();
-setInterval(displayCurrentDate, 1000); // Update date every second
 document.getElementById("fastest").textContent = "Fastest Game: N/A";
 document.getElementById("avgTime").textContent = "Average Time: N/A";
 updateLeaderboard();
-
-//timer
-function updateTimer() {
- let now = new Date().getTime();
- let elapsed = (now - start) / 1000;  // convert ms to seconds
- timer = elapsed.toFixed(2);
-}
-
-//Play button
-document.getElementById("playBtn").addEventListener("click", function(){
- clearInterval(intervalId);
- start = Date.now();
- timer = 0;
- updateTimer();
- intervalId = setInterval(updateTimer, 10);
- document.getElementById("guessBtn").disabled = false;
- document.getElementById("playBtn").disabled = true;
- guessCount = 0;
- let radio = document.getElementsByName("level");
- let range = 3;
- for (let i = 0; i < radio.length; i++){
-     if (radio[i].checked){
-         range = parseInt(radio[i].value);
-     }
- }
-
- //pick answer
- answer = Math.floor(Math.random() * range) + 1;
-
- //Disable & enable buttons/radios
- document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
- document.getElementById("guess").value="";
- document.getElementById("guessBtn").disabled = false;
- document.getElementById("playBtn").disabled = true;
- document.getElementById("giveUpBtn").disabled = false;
-
- for (let i = 0; i <radio.length; i++){
-     radio[i].disabled = true;
- }
-
-});
-
-//Guess button
-document.getElementById("guessBtn").addEventListener("click", function(){
- let guess = document.getElementById("guess").value;
- if (guess == answer){
-     clearInterval(intervalId);
-     const elapsedTime = (Date.now() - start) / 1000;
-     document.getElementById("msg").textContent = "Congratulations " + playerName + "! You guessed the correct number in " + (guessCount + 1) + " guesses and " + elapsedTime.toFixed(2) + " seconds!";
-     updateScore(guessCount + 1, elapsedTime);
-     document.getElementById("guessBtn").disabled = true;
-     document.getElementById("playBtn").disabled = false;
-     document.getElementById("giveUpBtn").disabled = true;
-
-     let radio = document.getElementsByName("level");
-     for (let i = 0; i < radio.length; i++){
-         radio[i].disabled = false;
-     }
- }
- else if (guess > answer ){
-     guessCount++;
-     document.getElementById("giveUpBtn").disabled = false;
-     difference = guess - answer;
-     document.getElementById("msg").textContent = playerName + ", your guess is too high, but ";
-     if (difference <= 2){
-         document.getElementById("msg").textContent += "You are very hot!";
-     }
-     else if (difference <= 5){
-         document.getElementById("msg").textContent += "You are warm!";
-     }
-     else if (difference > 5){
-         document.getElementById("msg").textContent += "You are cold!";
-     }
- }
- else if (guess < answer ){
-     document.getElementById("msg").textContent = playerName + ", your guess is too low, but ";
-     guessCount++;
-     document.getElementById("giveUpBtn").disabled = false;
-     difference = answer - guess;
-     if (difference <= 2){
-         document.getElementById("msg").textContent += "You are very hot!";
-     }
-     else if (difference <= 5){
-         document.getElementById("msg").textContent += "You are warm!";
-     }
-     else if (difference > 5){
-         document.getElementById("msg").textContent += "You are cold!";
-     }
- }
- else {
-     document.getElementById("msg").textContent = playerName + ", please enter a valid number between 1 and 100.";
-     document.getElementById("giveUpBtn").disabled = false;
- }
-});
-
-//Give up button
-document.getElementById("giveUpBtn").addEventListener("click", function(){
- let radio = document.getElementsByName("level");
- let range = 3;
- for (let i = 0; i < radio.length; i++){
-     if (radio[i].checked){
-         range = parseInt(radio[i].value);
-     }
- }
- let score = range;
- clearInterval(intervalId);
- const elapsedTime = (Date.now() - start) / 1000;
- document.getElementById("msg").textContent = "The correct answer was " + answer + ". Better luck next time, " + playerName + "! Your score is " + score + ".";
- recordGiveUpScore(score, elapsedTime);
- document.getElementById("guessBtn").disabled = true;
- document.getElementById("playBtn").disabled = false;
- document.getElementById("giveUpBtn").disabled = true;
-
- for (let i = 0; i < radio.length; i++){
-     radio[i].disabled = false;
- }
-});
-
-//stats
-function updateScore(score, elapsedTime){
- totalWins++;
- totalGames++;
- totalGuesses += score;
- totalTime += elapsedTime;
- if (elapsedTime < fastestTime) {
-     fastestTime = elapsedTime;
-     document.getElementById("fastest").textContent = "Fastest Game: " + fastestTime.toFixed(2) + " seconds";
- }
- document.getElementById("avgTime").textContent = "Average Time: " + (totalTime / totalWins).toFixed(2) + " seconds";
- scores.push({name: playerName, guesses: score});
- scores.sort((a, b) => a.guesses - b.guesses);
- updateLeaderboard();
- document.getElementById("wins").textContent = "Total Wins: " + totalWins;
- document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalGames || 0).toFixed(2);
-}
-
-function recordGiveUpScore(score, elapsedTime) {
- totalWins++;
- totalGames++;
- totalGuesses += score;
- totalTime += elapsedTime;
- if (elapsedTime < fastestTime) {
-     fastestTime = elapsedTime;
-     document.getElementById("fastest").textContent = "Fastest Game: " + fastestTime.toFixed(2) + " seconds";
- }
- document.getElementById("avgTime").textContent = "Average Time: " + (totalTime / totalWins).toFixed(2) + " seconds";
- scores.push({name: playerName, guesses: score});
- scores.sort((a, b) => a.guesses - b.guesses);
- updateLeaderboard();
- document.getElementById("wins").textContent = "Total Wins: " + totalWins;
- document.getElementById("avgScore").textContent = "Average Score: " + (totalGuesses / totalGames || 0).toFixed(2);
-}
-
-//leaderboard
-function updateLeaderboard() {
- document.getElementById("leader1").textContent = scores[0] ? scores[0].guesses : "_";
- document.getElementById("leader2").textContent = scores[1] ? scores[1].guesses : "_";
- document.getElementById("leader3").textContent = scores[2] ? scores[2].guesses : "_";
-}
