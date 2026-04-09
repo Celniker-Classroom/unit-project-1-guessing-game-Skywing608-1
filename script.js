@@ -7,6 +7,7 @@ let scores = 0;
 let now = new Date();
 let start = now;
 let intervalId;
+let difference;
 //Finding name
 let playerName = prompt("Hello! What is your name?");
 
@@ -20,6 +21,7 @@ function updateTimer() {
 
 //Play button
 document.getElementById("playBtn").addEventListener("click", function(){
+    intervalId = setInterval(updateTimer, 10);
     document.getElementById("guessBtn").disabled = false;
     document.getElementById("playBtn").disabled = true;
     let radio = document.getElementsByName("level");
@@ -28,7 +30,6 @@ document.getElementById("playBtn").addEventListener("click", function(){
         if (radio[i].checked){
             range = parseInt(radio[i].value);
         }
-    intervalId = setInterval(updateTimer, 10);
     }
 
     //pick answer
@@ -63,15 +64,34 @@ document.getElementById("guessBtn").addEventListener("click", function(){
         }
         clearInterval(intervalId);
     }
-    else if (guess > answer){
-        document.getElementById("msg").textContent = "Close " + playerName + "! The answer is lower. Try again!";
+    else if (guess > answer ){
         guessCount++;
         document.getElementById("giveUpBtn").disabled = false;
+        difference = guess - answer;
+        document.getElementById("msg").textContent = playerName + ", The answer is lower, but ";
+        if (difference <= 2){
+            document.getElementById("msg").textContent += "You are very hot!";
+        }
+        else if (difference <= 5){
+            document.getElementById("msg").textContent += "You are warm!";
+        }
+        else if (difference > 5){
+            document.getElementById("msg").textContent += "You are cold!";
+        }
     }
-    else if (guess < answer){
-        document.getElementById("msg").textContent = "Close " + playerName + "! The answer is higher. Try again!";   
+    else if (guess < answer ){   
+        document.getElementById("msg").textContent = playerName + ", The answer is lower, but ";
         guessCount++;
         document.getElementById("giveUpBtn").disabled = false;
+        if (difference <= 2){
+            document.getElementById("msg").textContent += playerName + "You are very hot!";
+        }
+        else if (difference <= 5){
+            document.getElementById("msg").textContent += playerName + "You are warm!";
+        }
+        else if (difference > 5){
+            document.getElementById("msg").textContent += playerName + "You are cold!";
+        }
     }
     else {
         document.getElementById("msg").textContent = "Invalid input, please enter a valid number.";
@@ -92,7 +112,7 @@ document.getElementById("giveUpBtn").addEventListener("click", function(){
     for (let i = 0; i < radio.length; i++){
         radio[i].disabled = false;
     }
-})
+});
 
 //stats
 
