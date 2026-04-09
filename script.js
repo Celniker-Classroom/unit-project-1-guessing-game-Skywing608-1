@@ -122,7 +122,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
        guessCount++;
        document.getElementById("giveUpBtn").disabled = false;
        difference = guess - answer;
-       document.getElementById("msg").textContent = playerName + ", The answer is lower, but ";
+       document.getElementById("msg").textContent = playerName + ", your guess is too high, but ";
        if (difference <= 2){
            document.getElementById("msg").textContent += "You are very hot!";
        }
@@ -134,7 +134,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
        }
    }
    else if (guess < answer ){  
-       document.getElementById("msg").textContent = playerName + ", The answer is higher, but ";
+       document.getElementById("msg").textContent = playerName + ", your guess is too low, but ";
        guessCount++;
        document.getElementById("giveUpBtn").disabled = false;
        difference = answer - guess;
@@ -159,6 +159,8 @@ document.getElementById("guessBtn").addEventListener("click", function(){
 document.getElementById("giveUpBtn").addEventListener("click", function(){
    let radio = document.getElementsByName("level");
    let range = 3;
+   totalWins++;
+   totalGames++;
    for (let i = 0; i < radio.length; i++){
        if (radio[i].checked){
            range = parseInt(radio[i].value);
