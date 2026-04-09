@@ -201,8 +201,6 @@ function updateScore(score, elapsedTime){
 
 
 function recordGiveUpScore(score) {
-   totalWins++;
-   totalGames++;
    totalGuesses += score;
    scores.push({name: playerName, guesses: score});
    scores.sort((a, b) => a.guesses - b.guesses);
