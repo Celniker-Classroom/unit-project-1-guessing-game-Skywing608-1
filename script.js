@@ -47,6 +47,7 @@ function displayCurrentDate() {
 
 // Initialize displays
 displayCurrentDate();
+setInterval(displayCurrentDate, 1000); // Update date every second
 document.getElementById("fastest").textContent = "Fastest Game: N/A";
 document.getElementById("avgTime").textContent = "Average Time: N/A";
 updateLeaderboard();
@@ -120,7 +121,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
    else if (guess > answer ){
        guessCount++;
        document.getElementById("giveUpBtn").disabled = false;
-       difference = Math.abs(guess - answer);
+       difference = guess - answer;
        document.getElementById("msg").textContent = playerName + ", The answer is lower, but ";
        if (difference <= 2){
            document.getElementById("msg").textContent += "You are very hot!";
@@ -198,6 +199,7 @@ function updateScore(score, elapsedTime){
 
 
 function recordGiveUpScore(score) {
+   totalWins++;
    totalGames++;
    totalGuesses += score;
    scores.push({name: playerName, guesses: score});
@@ -209,9 +211,10 @@ function recordGiveUpScore(score) {
 
 //leaderboard
 function updateLeaderboard() {
-   document.getElementById("leader1").textContent = scores[0] ? `1. ${scores[0].name} - ${scores[0].guesses} guesses` : "1. _";
-   document.getElementById("leader2").textContent = scores[1] ? `2. ${scores[1].name} - ${scores[1].guesses} guesses` : "2. _";
-   document.getElementById("leader3").textContent = scores[2] ? `3. ${scores[2].name} - ${scores[2].guesses} guesses` : "3. _";
+   document.getElementById("leader1").textContent = scores[0] ? scores[0].guesses : "_";
+   document.getElementById("leader2").textContent = scores[1] ? scores[1].guesses : "_";
+   document.getElementById("leader3").textContent = scores[2] ? scores[2].guesses : "_";
 }
  
+
 
