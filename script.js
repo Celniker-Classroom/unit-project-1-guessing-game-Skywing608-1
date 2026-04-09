@@ -120,7 +120,7 @@ document.getElementById("guessBtn").addEventListener("click", function(){
    else if (guess > answer ){
        guessCount++;
        document.getElementById("giveUpBtn").disabled = false;
-       difference = guess - answer;
+       difference = Math.abs(guess - answer);
        document.getElementById("msg").textContent = playerName + ", The answer is lower, but ";
        if (difference <= 2){
            document.getElementById("msg").textContent += "You are very hot!";
