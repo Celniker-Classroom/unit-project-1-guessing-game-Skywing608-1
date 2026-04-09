@@ -114,9 +114,9 @@ function makeGuess() {
        // Wrong guess - provide feedback
        let feedback = "";
        if (guess > answer) {
-           feedback = "The answer is lower";
+           feedback = "Your guess is too high";
        } else {
-           feedback = "The answer is higher";
+           feedback = "Your guess is too low";
        }
 
 
