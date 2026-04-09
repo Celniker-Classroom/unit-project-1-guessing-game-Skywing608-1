@@ -4,12 +4,12 @@
  <title>JavaScript Number Guessing Game</title>
  <style>
    :root {
-     --bg-color: #ffffff;
+     --bg-color: #00000000;
      --text-color: #000000;
      --button-bg: #f0f0f0;
-     --button-border: #ccc;
+     --button-border: #000000;
      --input-bg: #fff;
-     --input-border: #ccc;
+     --input-border: #000000;
    }
 
    .dark-mode {
@@ -24,6 +24,7 @@
    body {
      background-color: var(--bg-color);
      color: var(--text-color);
+     border-color: #000000;
      font-family: Arial, sans-serif;
      padding: 20px;
      transition: background-color 0.3s, color 0.3s;
@@ -41,7 +42,8 @@
 
    input[type="text"] {
      background-color: var(--input-bg);
-     border: 1px solid var(--input-border);
+     border: 2px solid var(--input-border);
+     border-color: #000000;
      color: var(--text-color);
      padding: 5px;
      transition: background-color 0.3s, border-color 0.3s;
@@ -107,9 +109,12 @@
  <input type="radio" name="level" id="e" value="3" checked><label for="e">Easy</label>
  <input type="radio" name="level" id="m" value="10"><label for="m">Medium</label>
  <input type="radio" name="level" id="h" value="100"><label for="h">Hard</label>
+ <input type="radio" name="level" id="i" value="1000"><label for="i">Insane</label>
 
  <button id="playBtn">Play</button>
 
+ <button id="changeNameBtn">Change Name</button>
+ 
  <h3 id="msg">Select a Level</h3>
  <input type="text" id="guess">
  <button id="guessBtn" disabled>Guess</button>

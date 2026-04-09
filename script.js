@@ -15,6 +15,14 @@ let timeIntervalId;
 let playerName = prompt("Hello! What is your name?");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
+//Change name button
+document.getElementById("changeNameBtn").addEventListener("click", function() {
+   let newName = prompt("Enter your new name:");
+   if (newName) {
+       playerName = newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase();
+       document.getElementById("msg").textContent = "Name changed to " + playerName + ". Please select a level to play.";
+   }
+});
 
 // Function to format time with month name, day suffix, and seconds
 function time() {
@@ -111,7 +119,7 @@ function makeGuess() {
        updateTimers(elapsedTime);
        reset();
    } else {
-       // Wrong guess - provide feedback
+       // Wrong guess 
        let feedback = "";
        if (guess > answer) {
            feedback = "Your guess is too high";
@@ -141,7 +149,7 @@ function updateScore(score) {
    totalGames++;
    totalGuesses += score;
    scores.push(score);
-   scores.sort((a, b) => a - b); // Sort ascending (lower = better)
+   scores.sort((a, b) => a - b); 
 
    // Update displays
    document.getElementById("wins").textContent = "Total wins: " + totalWins;
